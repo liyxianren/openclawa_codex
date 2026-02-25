@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/verify.schema.json",
+  "$id": "https://github.com/liyxianren/openclaw-codex-agent/schemas/verify.schema.json",
   "title": "VerifyReport",
   "type": "object",
   "additionalProperties": true,

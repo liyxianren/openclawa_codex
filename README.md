@@ -1,6 +1,6 @@
 # OpenClawA Codex Dev Workflow (dev-workflow v3)
 
-[![CI](https://github.com/liyxianren/openclawa_codex/actions/workflows/ci.yml/badge.svg)](https://github.com/liyxianren/openclawa_codex/actions/workflows/ci.yml)
+[![CI](https://github.com/liyxianren/openclaw-codex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/liyxianren/openclaw-codex-agent/actions/workflows/ci.yml)
 
 **Contract-first** 的“辅助开发”流水线规范：把一次开发需求编排为 **Plan → Run(Codex) → Verify →（最多一次 Fix）**，并通过可校验的 JSON 契约产物实现**可复现、可验收、可审计**。
 

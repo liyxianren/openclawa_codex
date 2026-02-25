@@ -5,7 +5,7 @@
 ## 给 OpenClaw 的一句话（推荐直接复制）
 把下面这段发给你的 OpenClaw：
 
-> 请阅读并执行：https://github.com/liyxianren/openclawa_codex/blob/main/OPENCLAW.md
+> 请阅读并执行：https://github.com/liyxianren/openclaw-codex-agent/blob/main/OPENCLAW.md
 > 
 > 目标：把 dev-workflow v3 安装到我的 OpenClaw，并给我一个 smoke 用法示例。注意不要做任何对外发布/上传/删库删文件等操作；如需外部副作用请先问我确认。
 
@@ -24,11 +24,11 @@ mkdir -p ~/.openclaw/workspace/repos
 cd ~/.openclaw/workspace/repos
 
 # 如果已存在，先 git pull；否则 clone
-if [ -d openclawa_codex/.git ]; then
-  cd openclawa_codex && git pull
+if [ -d openclaw-codex-agent/.git ]; then
+  cd openclaw-codex-agent && git pull
 else
-  git clone https://github.com/liyxianren/openclawa_codex.git
-  cd openclawa_codex
+  git clone https://github.com/liyxianren/openclaw-codex-agent.git
+  cd openclaw-codex-agent
 fi
 ```
 

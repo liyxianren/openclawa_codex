@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/plan-bundle.schema.json",
+  "$id": "https://github.com/liyxianren/openclaw-codex-agent/schemas/plan-bundle.schema.json",
   "title": "PlanBundle",
   "type": "object",
   "additionalProperties": false,

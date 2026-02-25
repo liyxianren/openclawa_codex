@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/latest.schema.json",
+  "$id": "https://github.com/liyxianren/openclaw-codex-agent/schemas/latest.schema.json",
   "title": "RunnerLatest",
   "type": "object",
   "additionalProperties": true,
