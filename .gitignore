@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Node / Python
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# OpenClaw run artifacts (should not be committed)
+.openclaw-runs/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/

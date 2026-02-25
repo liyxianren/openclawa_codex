@@ -1,0 +1,16 @@
+{
+  "task_name": "example-local-dashboard",
+  "workdir": "/abs/path/to/your/project",
+  "codex_prompt": "Implement feature X... (include DoD + files to change + assumptions)",
+  "acceptance": [
+    "Can start the server",
+    "Home page shows status cards",
+    "Smoke test passes"
+  ],
+  "run_commands": [
+    "cd /abs/path/to/your/project",
+    "npm ci",
+    "npm run lint",
+    "npm test"
+  ]
+}
