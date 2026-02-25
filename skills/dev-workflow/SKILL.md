@@ -63,7 +63,7 @@ sessions_spawn({
   cleanup: "keep",
   timeoutSeconds: 3600,
   thinking: "high",
-  task: `你是 Runner agent（dev-workflow v3 的 Run：调用 Codex CLI 全自动实现）。\n\n输入 Plan Bundle JSON：\n{PLAN_BUNDLE_JSON}\n\n要求：\n1) 禁止在敏感目录下运行（命中则直接失败回传原因）：\n   - ~/.openclaw/agents/\n   - ~/.openclaw/credentials/\n   - ~/.openclaw/**/auth*.json\n   允许在 ~/.openclaw/workspace 的“具体项目子目录”运行（workdir 不能是 workspace 根目录）。\n2) 确保 workdir 存在且可写：不存在则 mkdir -p；在 workdir 内确保是 git 仓库：若不是 repo，则 git init。\n3) 必须使用 OpenClaw exec 工具（pty:true），在 workdir 运行：\n   codex exec --full-auto \"<codex_prompt>\"\n4) 在 <workdir>/.openclaw-runs/<run_id>/ 写入：task-output.txt、latest.json。\n5) 最终回传：status(done|failed)、summary（可直接发回入口会话）、latest.json 的绝对路径。\n\nlatest.json 字段（必须）：task_name,timestamp,workdir,status,summary,output_tail,artifacts{stdout_path}。\n注意：全自动，不要向用户提问；失败也要产出 latest.json（status=failed）并给 next suggestion。`
+  task: `你是 Runner agent（dev-workflow v3 的 Run：执行层通过 Codex CLI 全自动实现）。\n\n输入 Plan Bundle JSON：\n{PLAN_BUNDLE_JSON}\n\n要求：\n1) 禁止在敏感目录下运行（命中则直接失败回传原因）：\n   - ~/.openclaw/agents/\n   - ~/.openclaw/credentials/\n   - ~/.openclaw/**/auth*.json\n   允许在 ~/.openclaw/workspace 的“具体项目子目录”运行（workdir 不能是 workspace 根目录）。\n2) 确保 workdir 存在且可写：不存在则 mkdir -p；并确保 workdir 是 git 仓库（Codex CLI 默认要求在 git repo 内运行）。若不是 repo，则 git init。\n3) 必须使用 OpenClaw exec 工具（pty:true）调用 Codex CLI，并把执行过程沉淀为 artifacts（可审计/可回放）。\n\n   你需要在 <workdir>/.openclaw-runs/<run_id>/ 产出以下文件：\n   - codex-output.schema.json（用于 codex exec --output-schema；约束 Codex 最终输出为可校验 JSON）\n   - codex-prompt.txt（写入 <codex_prompt>，避免复杂转义）\n   - codex-events.jsonl（codex exec --json 的事件流输出）\n   - codex-last-message.json（codex exec --output-last-message 的最终消息；需符合 schema）\n   - task-output.txt（你自己的关键日志尾部/摘要）\n   - latest.json（Runner 合同产物）\n\n   推荐命令形态（可等价实现，但 artifacts 必须齐全）：\n   - RUN_ID=\"$(date +%Y%m%d-%H%M%S)-devwf\"\n   - RUN_DIR=\"<workdir>/.openclaw-runs/$RUN_ID\"\n   - mkdir -p \"$RUN_DIR\"\n   - 写 schema：\n     cat > \"$RUN_DIR/codex-output.schema.json\" <<'JSON'\n     {\n       \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n       \"type\": \"object\",\n       \"additionalProperties\": false,\n       \"required\": [\"summary\", \"changes\"],\n       \"properties\": {\n         \"summary\": {\"type\": \"string\"},\n         \"changes\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}}\n       }\n     }\n     JSON\n   - 写 prompt：\n     cat > \"$RUN_DIR/codex-prompt.txt\" <<'PROMPT'\n     <codex_prompt>\n     PROMPT\n   - 执行 Codex（事件流落盘到 JSONL）：\n     codex exec --full-auto -C \"<workdir>\" \\\n       --output-schema \"$RUN_DIR/codex-output.schema.json\" \\\n       --output-last-message \"$RUN_DIR/codex-last-message.json\" \\\n       --json - < \"$RUN_DIR/codex-prompt.txt\" > \"$RUN_DIR/codex-events.jsonl\"\n\n4) latest.json 字段（必须）：task_name,timestamp,workdir,status,summary,output_tail,artifacts{stdout_path,run_dir,codex_events_jsonl_path,codex_last_message_path,codex_output_schema_path}。\n5) 最终回传：status(done|failed)、summary（可直接发回入口会话）、latest.json 的绝对路径。\n\n注意：全自动，不要向用户提问；失败也要产出 latest.json（status=failed）并给 next suggestion。`
 })
 ```
 
@@ -109,12 +109,22 @@ sessions_spawn({
 
 ## 5) Output contract
 - Plan Bundle：文本中包含 JSON 块（BEGIN/END 标记）
-- latest.json：`<workdir>/.openclaw-runs/<run_id>/latest.json`
-- verify.json：`<workdir>/.openclaw-runs/<run_id>/verify.json`
+- Runner artifacts（都在 `<workdir>/.openclaw-runs/<run_id>/` 下）：
+  - latest.json：`<workdir>/.openclaw-runs/<run_id>/latest.json`
+  - task-output.txt：`<workdir>/.openclaw-runs/<run_id>/task-output.txt`
+  - codex-events.jsonl：`<workdir>/.openclaw-runs/<run_id>/codex-events.jsonl`
+  - codex-last-message.json：`<workdir>/.openclaw-runs/<run_id>/codex-last-message.json`
+  - codex-output.schema.json：`<workdir>/.openclaw-runs/<run_id>/codex-output.schema.json`
+- Verifier artifacts（同目录）：
+  - verify.json：`<workdir>/.openclaw-runs/<run_id>/verify.json`
+  - verify-report.txt：`<workdir>/.openclaw-runs/<run_id>/verify-report.txt`
 
 ## 6) Hard constraints
 - Plan 必须产出可解析 Plan Bundle JSON（BEGIN/END）。
-- Run 必须通过 `exec` + `pty:true` 调用 Codex CLI。
+- Run 必须通过 OpenClaw `exec` + `pty:true` 调用 Codex CLI，并落盘执行层 artifacts：
+  - `codex exec --json` → codex-events.jsonl
+  - `codex exec --output-last-message` → codex-last-message.json
+  - `codex exec --output-schema` → codex-output.schema.json
 - Verify 必须实际执行 run_commands 并产出 verify.json（BEGIN/END）。
 - 自动修复最多 1 次；且仅在 fail_kind=test_fail 时触发。
 - 未经用户明确确认：不得对外发布/上传/发送到其他群/账号（默认仅回传到入口会话）。
