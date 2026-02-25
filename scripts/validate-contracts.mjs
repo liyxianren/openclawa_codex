@@ -56,23 +56,55 @@ async function main() {
     return;
   }
 
+  function cloneErrors(errors) {
+    if (!errors) return [];
+    return errors.map(e => ({ ...e }));
+  }
+
+  function detectKind(filePath) {
+    const p = filePath.toLowerCase();
+    // Prefer explicit tokens in filename; fall back to path includes.
+    const base = path.basename(p);
+    if (/\bplan\b|plan-bundle|plan_bundle/.test(base) || /\/plan\b/.test(p)) return 'plan';
+    if (/\blatest\b/.test(base) || /\/latest\b/.test(p)) return 'latest';
+    if (/\bverify\b/.test(base) || /\/verify\b/.test(p)) return 'verify';
+    return null;
+  }
+
+  function validateOne(kind, obj) {
+    if (kind === 'plan') return { kind, ok: validatePlan(obj), errors: cloneErrors(validatePlan.errors) };
+    if (kind === 'latest') return { kind, ok: validateLatest(obj), errors: cloneErrors(validateLatest.errors) };
+    if (kind === 'verify') return { kind, ok: validateVerify(obj), errors: cloneErrors(validateVerify.errors) };
+    throw new Error(`Unknown kind: ${kind}`);
+  }
+
   let failed = 0;
   for (const f of files) {
     const obj = await readJson(f);
 
-    let ok = true;
-    if (f.includes('plan')) ok = validatePlan(obj);
-    else if (f.includes('latest')) ok = validateLatest(obj);
-    else if (f.includes('verify')) ok = validateVerify(obj);
-    else {
-      // default: try best-effort (verify then latest then plan)
-      ok = validateVerify(obj) || validateLatest(obj) || validatePlan(obj);
+    const kind = detectKind(f);
+    const attempts = [];
+    const candidates = kind ? [kind] : ['verify', 'latest', 'plan'];
+
+    for (const k of candidates) {
+      const r = validateOne(k, obj);
+      attempts.push(r);
+      if (r.ok) break;
     }
+
+    const ok = attempts.some(a => a.ok);
 
     if (!ok) {
       failed++;
-      const errs = validatePlan.errors || validateLatest.errors || validateVerify.errors;
-      console.error(`\n[FAIL] ${path.relative(root, f)}\n${formatErrors(errs)}`);
+      // Choose the most informative error set (heuristic: fewest errors).
+      const best = attempts.reduce((acc, cur) => {
+        if (!acc) return cur;
+        return (cur.errors.length < acc.errors.length) ? cur : acc;
+      }, null);
+
+      const tried = attempts.map(a => a.kind).join(', ');
+      const header = best ? `Tried: ${tried}; best match: ${best.kind} (${best.errors.length} errors)` : `Tried: ${tried}`;
+      console.error(`\n[FAIL] ${path.relative(root, f)}\n${header}\n${formatErrors(best?.errors || [])}`);
     } else {
       console.log(`[OK]   ${path.relative(root, f)}`);
     }
