@@ -46,7 +46,16 @@ cp -R ./skills/dev-workflow ~/.openclaw/workspace/skills/dev-workflow
 openclaw gateway restart
 ```
 
-### 3)（可选但强烈推荐）确保 workspace 根目录有 CHECKLIST.md
+### 3)（强烈推荐）在 AGENTS.md 加“辅助编程”强制路由
+把本仓库的这段规则追加到你的：
+- `~/.openclaw/workspace/AGENTS.md`
+
+规则内容见：
+- `snippets/AGENTS-routing.md`
+
+这样当用户说“辅助编程/辅助开发/帮我开发…”时，会固定进入 dev-workflow 工作流。
+
+### 4)（可选但强烈推荐）确保 workspace 根目录有 CHECKLIST.md
 本仓库提供了 checklist 文档：`docs/preflight-checklist.md`。
 
 你可以把它保存为：`~/.openclaw/workspace/CHECKLIST.md`，并让所有写文件/执行命令前先过一遍，降低误操作风险。

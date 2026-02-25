@@ -86,6 +86,7 @@ npm test
 - 契约说明：`docs/contract-spec.md`
 - Roadmap：`docs/roadmap.md`
 - OpenClaw 导入指南：`OPENCLAW.md`
+- 路由规范：`docs/routing.md`
 
 ## CI
 GitHub Actions 会自动跑：
