@@ -1,0 +1,17 @@
+{
+  "task_name": "demo-todo-app",
+  "workdir": "/tmp/demo-todo-app",
+  "verify_status": "pass",
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit_code": 0,
+      "stdout_tail": "PASS",
+      "stderr_tail": ""
+    }
+  ],
+  "artifacts": {
+    "verify_json": "/tmp/demo-todo-app/.openclaw-runs/demo-run-2/verify.json",
+    "verify_report": "/tmp/demo-todo-app/.openclaw-runs/demo-run-2/verify-report.txt"
+  }
+}

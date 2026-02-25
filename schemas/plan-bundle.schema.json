@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/plan-bundle.schema.json",
+  "title": "PlanBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_name", "workdir", "codex_prompt", "acceptance", "run_commands"],
+  "properties": {
+    "task_name": { "type": "string", "minLength": 1 },
+    "workdir": { "type": "string", "minLength": 1 },
+    "codex_prompt": { "type": "string", "minLength": 1 },
+    "acceptance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "run_commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "task_name": "demo-todo-app",
+  "workdir": "/tmp/demo-todo-app",
+  "verify_status": "fail",
+  "fail_kind": "test_fail",
+  "fail_summary": "npm test failed: expected 2 items, got 1",
+  "commands": [
+    {
+      "cmd": "npm test",
+      "exit_code": 1,
+      "stdout_tail": "...",
+      "stderr_tail": "AssertionError: expected 2 items, got 1"
+    }
+  ],
+  "artifacts": {
+    "verify_json": "/tmp/demo-todo-app/.openclaw-runs/demo-run/verify.json",
+    "verify_report": "/tmp/demo-todo-app/.openclaw-runs/demo-run/verify-report.txt"
+  }
+}

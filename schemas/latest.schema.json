@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/latest.schema.json",
+  "title": "RunnerLatest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["task_name", "timestamp", "workdir", "status", "summary"],
+  "properties": {
+    "task_name": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "workdir": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["done", "failed"] },
+    "summary": { "type": "string" },
+    "output_tail": { "type": "string" },
+    "artifacts": { "type": "object" }
+  }
+}

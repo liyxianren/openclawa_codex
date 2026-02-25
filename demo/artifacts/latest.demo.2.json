@@ -1,0 +1,11 @@
+{
+  "task_name": "demo-todo-app",
+  "timestamp": "2026-02-25T12:01:00+08:00",
+  "workdir": "/tmp/demo-todo-app",
+  "status": "done",
+  "summary": "Applied minimal patch to fix failing test",
+  "output_tail": "...",
+  "artifacts": {
+    "stdout_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run-2/task-output.txt"
+  }
+}

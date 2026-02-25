@@ -1,0 +1,11 @@
+{
+  "task_name": "demo-todo-app",
+  "timestamp": "2026-02-25T12:00:00+08:00",
+  "workdir": "/tmp/demo-todo-app",
+  "status": "done",
+  "summary": "Implemented TODO app v1 (first attempt)",
+  "output_tail": "...",
+  "artifacts": {
+    "stdout_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/task-output.txt"
+  }
+}

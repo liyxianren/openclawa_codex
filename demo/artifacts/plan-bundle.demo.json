@@ -1,0 +1,13 @@
+{
+  "task_name": "demo-todo-app",
+  "workdir": "/tmp/demo-todo-app",
+  "codex_prompt": "Implement a tiny TODO app. Assumptions: ... DoD: ... Verify with run_commands.",
+  "acceptance": [
+    "Can run test suite",
+    "All commands in run_commands succeed"
+  ],
+  "run_commands": [
+    "cd /tmp/demo-todo-app",
+    "npm test"
+  ]
+}

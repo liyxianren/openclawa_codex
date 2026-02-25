@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liyxianren/openclawa_codex/schemas/verify.schema.json",
+  "title": "VerifyReport",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["task_name", "workdir", "verify_status", "commands", "artifacts"],
+  "properties": {
+    "task_name": { "type": "string", "minLength": 1 },
+    "workdir": { "type": "string", "minLength": 1 },
+    "verify_status": { "type": "string", "enum": ["pass", "fail"] },
+    "fail_kind": { "type": "string", "enum": ["test_fail", "infra_or_auth_blocked"] },
+    "fail_summary": { "type": "string" },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["cmd", "exit_code"],
+        "properties": {
+          "cmd": { "type": "string", "minLength": 1 },
+          "exit_code": { "type": "integer" },
+          "stdout_tail": { "type": "string" },
+          "stderr_tail": { "type": "string" }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["verify_json", "verify_report"],
+      "properties": {
+        "verify_json": { "type": "string", "minLength": 1 },
+        "verify_report": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "verify_status": { "const": "fail" } },
+        "required": ["verify_status"]
+      },
+      "then": {
+        "required": ["fail_kind", "fail_summary"]
+      }
+    }
+  ]
+}
