@@ -4,14 +4,30 @@
   "title": "RunnerLatest",
   "type": "object",
   "additionalProperties": true,
-  "required": ["task_name", "timestamp", "workdir", "status", "summary"],
+  "required": ["task_name", "timestamp", "workdir", "status", "summary", "artifacts"],
   "properties": {
     "task_name": { "type": "string", "minLength": 1 },
-    "timestamp": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
     "workdir": { "type": "string", "minLength": 1 },
     "status": { "type": "string", "enum": ["done", "failed"] },
     "summary": { "type": "string" },
     "output_tail": { "type": "string" },
-    "artifacts": { "type": "object" }
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "run_dir",
+        "codex_events_jsonl_path",
+        "codex_last_message_path",
+        "codex_output_schema_path"
+      ],
+      "properties": {
+        "run_dir": { "type": "string", "minLength": 1 },
+        "stdout_path": { "type": "string" },
+        "codex_events_jsonl_path": { "type": "string", "minLength": 1 },
+        "codex_last_message_path": { "type": "string", "minLength": 1 },
+        "codex_output_schema_path": { "type": "string", "minLength": 1 }
+      }
+    }
   }
 }

@@ -6,6 +6,10 @@
   "summary": "Implemented TODO app v1 (first attempt)",
   "output_tail": "...",
   "artifacts": {
-    "stdout_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/task-output.txt"
+    "run_dir": "/tmp/demo-todo-app/.openclaw-runs/demo-run",
+    "stdout_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/task-output.txt",
+    "codex_events_jsonl_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/codex-events.jsonl",
+    "codex_last_message_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/codex-last-message.json",
+    "codex_output_schema_path": "/tmp/demo-todo-app/.openclaw-runs/demo-run/codex-output.schema.json"
   }
 }

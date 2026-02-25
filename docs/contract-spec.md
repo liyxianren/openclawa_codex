@@ -15,8 +15,15 @@
 
 ## 2) Runner latest.json
 - Schema：`schemas/latest.schema.json`
+- 示例：`examples/latest.example.json`
 
 用途：记录 Runner 阶段执行摘要、日志尾部与产物路径。
+
+推荐把执行层做成“可审计/可回放”：
+- `artifacts.run_dir`
+- `artifacts.codex_events_jsonl_path`（Codex JSONL 事件流）
+- `artifacts.codex_last_message_path`（Codex 最终消息，建议为严格 JSON）
+- `artifacts.codex_output_schema_path`（最终消息的 schema）
 
 ## 3) Verifier verify.json
 - Schema：`schemas/verify.schema.json`

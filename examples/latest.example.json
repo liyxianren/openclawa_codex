@@ -1,0 +1,15 @@
+{
+  "task_name": "example-local-dashboard",
+  "timestamp": "2026-02-25T12:00:00+08:00",
+  "workdir": "/abs/path/to/your/project",
+  "status": "done",
+  "summary": "Implemented feature X; tests pass.",
+  "output_tail": "...",
+  "artifacts": {
+    "run_dir": "/abs/path/to/your/project/.openclaw-runs/20260225-120000-devwf",
+    "stdout_path": "/abs/path/to/your/project/.openclaw-runs/20260225-120000-devwf/task-output.txt",
+    "codex_events_jsonl_path": "/abs/path/to/your/project/.openclaw-runs/20260225-120000-devwf/codex-events.jsonl",
+    "codex_last_message_path": "/abs/path/to/your/project/.openclaw-runs/20260225-120000-devwf/codex-last-message.json",
+    "codex_output_schema_path": "/abs/path/to/your/project/.openclaw-runs/20260225-120000-devwf/codex-output.schema.json"
+  }
+}
