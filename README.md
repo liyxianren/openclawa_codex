@@ -12,6 +12,31 @@
 - **Verifier verify.json**：记录逐条验收命令的 exit code 与 stdout/stderr tail
 - **风险约束**：最多一次自动修复；区分 `test_fail` / `infra_or_auth_blocked`；强调敏感目录与外发确认
 
+## 🧩 架构图（Plan → Run → Verify → Fix）
+```mermaid
+flowchart TD
+  U[User request] --> A[Main agent (ACK + orchestration)]
+  A --> P[planner-agent\nPlan Bundle JSON]
+  P --> R[executor-agent\nRun: codex exec --full-auto]
+  R --> V[reviewer-agent\nVerify: run_commands]
+
+  V -->|pass| DONE[Report back + artifacts]
+  V -->|fail_kind=test_fail & retry=0| FP[planner-agent\nFix prompt (minimal patch)]
+  FP --> R2[executor-agent\nRun patch]
+  R2 --> V2[reviewer-agent\nVerify again]
+  V2 -->|pass| DONE
+  V2 -->|fail| HUMAN[Stop + ask human]
+
+  V -->|fail_kind=infra_or_auth_blocked| HUMAN
+```
+
+## 📦 契约产物（Contract Artifacts）
+- Plan 阶段：`Plan Bundle JSON`
+- Run 阶段：`latest.json`
+- Verify 阶段：`verify.json`
+
+这些产物让流程**可复现/可审计**：失败时不靠“复述”，而是直接拿 `verify.json` 的失败证据驱动最小修复。
+
 ## 在 OpenClaw 里使用（推荐入口）
 这套框架的定位是：**服务 OpenClaw 的 Codex 辅助编程范式**。
 
