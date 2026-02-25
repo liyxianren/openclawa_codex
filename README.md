@@ -15,19 +15,19 @@
 ## 🧩 架构图（Plan → Run → Verify → Fix）
 ```mermaid
 flowchart TD
-  U["User request"] --> A["Main agent<br/>ACK / orchestration"]
-  A --> P["planner-agent<br/>Plan Bundle (JSON)"]
-  P --> R["executor-agent<br/>Run (Codex)"]
-  R --> V["reviewer-agent<br/>Verify (run_commands)"]
+  U[User request] --> A[Main agent]
+  A --> P[Planner agent]
+  P --> R[Executor agent]
+  R --> V[Reviewer agent]
 
-  V -->|pass| DONE["Report back<br/>artifacts"]
-  V -->|test_fail (1st)| FP["planner-agent<br/>Fix prompt<br/>minimal patch"]
-  FP --> R2["executor-agent<br/>Run patch"]
-  R2 --> V2["reviewer-agent<br/>Verify again"]
+  V -->|pass| DONE[Report back]
+  V -->|test_fail_first| FP[Fix prompt]
+  FP --> R2[Run patch]
+  R2 --> V2[Verify again]
   V2 -->|pass| DONE
-  V2 -->|fail| HUMAN["Stop + ask human"]
+  V2 -->|fail| HUMAN[Human help]
 
-  V -->|infra/auth blocked| HUMAN
+  V -->|infra_or_auth_blocked| HUMAN
 ```
 
 ## 📦 契约产物（Contract Artifacts）
