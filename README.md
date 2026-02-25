@@ -15,19 +15,26 @@
 ## 🧩 架构图（Plan → Run → Verify → Fix）
 ```mermaid
 flowchart TD
-  U[User request] --> A[Main agent]
-  A --> P[Planner agent]
-  P --> R[Executor agent]
-  R --> V[Reviewer agent]
+  U[用户需求] --> A[主代理编排]
+  A --> P[规划代理]
+  P --> R[执行代理]
+  R --> V[验证代理]
 
-  V -->|pass| DONE[Report back]
-  V -->|test_fail_first| FP[Fix prompt]
-  FP --> R2[Run patch]
-  R2 --> V2[Verify again]
-  V2 -->|pass| DONE
-  V2 -->|fail| HUMAN[Human help]
+  V --> PASS[通过]
+  PASS --> DONE[回传结果]
 
-  V -->|infra_or_auth_blocked| HUMAN
+  V --> FAIL[失败]
+  FAIL --> TF[测试失败]
+  TF --> FP[生成最小修复提示]
+  FP --> R2[执行补丁]
+  R2 --> V2[再次验证]
+  V2 --> PASS2[通过]
+  PASS2 --> DONE
+  V2 --> FAIL2[失败]
+  FAIL2 --> HUMAN[人工介入]
+
+  FAIL --> IA[环境或鉴权阻塞]
+  IA --> HUMAN
 ```
 
 ## 📦 契约产物（Contract Artifacts）
