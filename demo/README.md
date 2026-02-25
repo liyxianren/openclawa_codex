@@ -13,5 +13,10 @@ npm test
 ```
 
 你会看到：
-- examples/ 与 demo/artifacts/ 下的 JSON 都通过 schema 校验
+- examples/ 与 demo/artifacts/ 下的 **contract JSON（plan/latest/verify）** 都通过 schema 校验
 - demo 回放输出：fail → fix → pass
+
+## 真实执行层样例（Codex real smoke）
+在 `demo/artifacts/real-smoke/` 里包含一次真实 `codex exec` 运行沉淀的 artifacts（包含事件流 JSONL、最终消息 JSON、以及 latest/verify 合同产物）。
+
+> 注意：事件流里可能包含类似 refresh token 无法刷新但仍可执行的告警；若你要彻底消除，请按 `OPENCLAW.md` / `docs/faq.md` 做 `codex logout/login`。

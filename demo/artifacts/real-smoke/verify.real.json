@@ -1,0 +1,12 @@
+{
+  "task_name": "real-smoke-readme",
+  "workdir": "/tmp/openclawa-real-smoke",
+  "verify_status": "pass",
+  "commands": [
+    {"cmd": "cat README.md", "exit_code": 0, "stdout_tail": "(omitted)", "stderr_tail": ""}
+  ],
+  "artifacts": {
+    "verify_json": "/tmp/openclawa-real-smoke/.openclaw-runs/real-smoke-20260225-1256/verify.json",
+    "verify_report": "/tmp/openclawa-real-smoke/.openclaw-runs/real-smoke-20260225-1256/verify-report.txt"
+  }
+}

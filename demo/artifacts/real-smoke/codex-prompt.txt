@@ -1,0 +1,5 @@
+Create a README.md with a one-line description of this directory.
+
+Constraints:
+- Make the change by editing files in this repo.
+- At the end, output ONLY a JSON object that matches the output schema with keys: summary (string), changes (string[]). No markdown fences.

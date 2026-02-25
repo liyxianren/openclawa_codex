@@ -69,7 +69,7 @@ codex exec --full-auto "<codex_prompt>"
 然后确保 OpenClaw 能加载该 skill。
 
 ## 维护者工具（可选）
-仓库内包含 JSON Schema + 本地校验脚本 + demo 契约回放，用于维护质量与 CI：
+仓库内包含 JSON Schema + 本地校验脚本 + demo 契约回放（含一次真实 Codex smoke artifacts），用于维护质量与 CI：
 
 ```bash
 npm install

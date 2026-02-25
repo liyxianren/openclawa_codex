@@ -42,8 +42,13 @@ async function main() {
   const validateVerify = ajv.compile(verifySchema);
 
   const files = [
-    ...(await glob(path.join(root, 'examples/**/*.json'))),
-    ...(await glob(path.join(root, 'demo/artifacts/**/*.json')))
+    // Only validate contract JSON files (plan/latest/verify). Ignore other JSON artifacts (e.g. schemas).
+    ...(await glob(path.join(root, 'examples/**/*plan*.json'))),
+    ...(await glob(path.join(root, 'examples/**/*latest*.json'))),
+    ...(await glob(path.join(root, 'examples/**/*verify*.json'))),
+    ...(await glob(path.join(root, 'demo/artifacts/**/*plan*.json'))),
+    ...(await glob(path.join(root, 'demo/artifacts/**/*latest*.json'))),
+    ...(await glob(path.join(root, 'demo/artifacts/**/*verify*.json')))
   ];
 
   if (files.length === 0) {
