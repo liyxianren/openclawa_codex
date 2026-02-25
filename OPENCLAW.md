@@ -35,7 +35,12 @@ fi
 ### 2) 检查 Codex CLI 可用（执行层依赖）
 ```bash
 codex --version
+
 # 如未登录：
+# codex login
+
+# 若遇到 refresh_token_reused / 401 Unauthorized：
+# codex logout
 # codex login
 ```
 

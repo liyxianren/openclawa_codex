@@ -11,6 +11,18 @@
 用 **Codex CLI**（例如 `codex exec --full-auto ...`），由 `executor-agent` 通过 OpenClaw 的 `exec` 工具（必须 PTY）去调用。
 详见：`docs/execution-layer.md`。
 
+## Q: 我运行 codex exec 报错 refresh_token_reused / 401 Unauthorized 怎么办？
+通常是本机 Codex CLI 的登录态失效。
+
+按顺序尝试：
+```bash
+codex logout
+codex login
+codex --version
+```
+
+然后再重试 `codex exec --full-auto ...`。
+
 ## Q: 我只有一个主 agent，也能用吗？
 可以，但体验会差一些。
 这套范式推荐用子 agent 把 Plan/Run/Verify 隔离，减少上下文污染，并提升可审计性。
