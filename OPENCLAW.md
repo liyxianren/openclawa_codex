@@ -32,7 +32,16 @@ else
 fi
 ```
 
-### 2) 安装 dev-workflow skill 到 OpenClaw workspace
+### 2) 检查 Codex CLI 可用（执行层依赖）
+```bash
+codex --version
+# 如未登录：
+# codex login
+```
+
+> 说明：本项目执行层使用的是 **Codex CLI（codex exec）** 来落地改代码。
+
+### 3) 安装 dev-workflow skill 到 OpenClaw workspace
 ```bash
 mkdir -p ~/.openclaw/workspace/skills
 

@@ -16,26 +16,38 @@
 ```mermaid
 flowchart TD
   U[用户需求] --> A[主代理编排]
-  A --> P[规划代理]
-  P --> R[执行代理]
-  R --> V[验证代理]
 
-  V --> PASS[通过]
-  PASS --> DONE[回传结果]
+  A --> P[规划代理 产出 PlanBundle]
+  P --> R[执行代理 调用 Codex]
+  R --> L[产出 latestjson]
 
-  V --> FAIL[失败]
-  FAIL --> TF[测试失败]
+  R --> V[验证代理 执行验收命令]
+  V --> Z[产出 verifyjson]
+
+  Z --> OK[通过]
+  OK --> DONE[回传结果]
+
+  Z --> BAD[失败]
+  BAD --> TF[测试失败]
   TF --> FP[生成最小修复提示]
-  FP --> R2[执行补丁]
+  FP --> R2[执行最小补丁]
   R2 --> V2[再次验证]
-  V2 --> PASS2[通过]
-  PASS2 --> DONE
-  V2 --> FAIL2[失败]
-  FAIL2 --> HUMAN[人工介入]
+  V2 --> DONE2[回传结果]
 
-  FAIL --> IA[环境或鉴权阻塞]
-  IA --> HUMAN
+  BAD --> IA[环境或鉴权阻塞]
+  IA --> HUMAN[人工介入]
 ```
+
+## 🔧 执行层（Executor）怎么执行
+一句话：**executor-agent 会在 workdir 里通过 OpenClaw exec（必须 PTY）调用 Codex CLI**。
+
+典型命令形态：
+```bash
+cd <workdir>
+codex exec --full-auto "<codex_prompt>"
+```
+
+更详细的执行层说明见：`docs/execution-layer.md`（包含为什么需要 Git repo、为什么必须 PTY、以及与 OpenClaw openai-codex 模型的区别）。
 
 ## 📦 契约产物（Contract Artifacts）
 - Plan 阶段：`Plan Bundle JSON`
@@ -87,6 +99,8 @@ npm test
 - Roadmap：`docs/roadmap.md`
 - OpenClaw 导入指南：`OPENCLAW.md`
 - 路由规范：`docs/routing.md`
+- 执行层细节：`docs/execution-layer.md`
+- FAQ：`docs/faq.md`
 
 ## CI
 GitHub Actions 会自动跑：
