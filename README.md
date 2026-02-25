@@ -12,25 +12,29 @@
 - **Verifier verify.json**：记录逐条验收命令的 exit code 与 stdout/stderr tail
 - **风险约束**：最多一次自动修复；区分 `test_fail` / `infra_or_auth_blocked`；强调敏感目录与外发确认
 
-## ✅ 先跑起来（不依赖 OpenClaw）
-这个仓库包含 **JSON Schema + 本地校验脚本 + demo 契约回放**，可以先在任何机器上跑通：
+## 在 OpenClaw 里使用（推荐入口）
+这套框架的定位是：**服务 OpenClaw 的 Codex 辅助编程范式**。
 
-```bash
-npm ci
-npm test
-```
+你可以把仓库地址发给你的 OpenClaw，让它按 `OPENCLAW.md` 自动安装：
+- 导入指南：`OPENCLAW.md`
 
-它会做两件事：
-1) 校验 `examples/` 与 `demo/artifacts/` 下所有契约 JSON
-2) 回放一个典型流程：fail → fix → pass（不执行真实 Codex，仅回放产物）
-
-## 在 OpenClaw 里使用（需要你已安装 OpenClaw）
-### 1) 安装 skill
+### 手动安装（可选）
 把本仓库的 `skills/dev-workflow/` 复制到你的：
-
 - `~/.openclaw/workspace/skills/dev-workflow/`
 
 然后确保 OpenClaw 能加载该 skill。
+
+## 维护者工具（可选）
+仓库内包含 JSON Schema + 本地校验脚本 + demo 契约回放，用于维护质量与 CI：
+
+```bash
+npm install
+npm test
+```
+
+它会：
+1) 校验 `examples/` 与 `demo/artifacts/` 下所有契约 JSON
+2) 回放一个典型流程：fail → fix → pass（不执行真实 Codex，仅回放产物）
 
 ### 2) 使用
 在主会话里直接提需求（例如“帮我开发一个xxx”），让编排触发：
@@ -49,6 +53,7 @@ npm test
 - JSON Schema：`schemas/*.schema.json`
 - 契约说明：`docs/contract-spec.md`
 - Roadmap：`docs/roadmap.md`
+- OpenClaw 导入指南：`OPENCLAW.md`
 
 ## CI
 GitHub Actions 会自动跑：
