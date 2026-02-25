@@ -20,17 +20,18 @@
 ## Mermaid 流程图
 ```mermaid
 flowchart TD
-  U[User request] --> A[Main agent ACK]
-  A --> P[planner-agent: Plan Bundle]
-  P --> R[executor-agent: Codex Run]
-  R --> V[reviewer-agent: Verify]
-  V -->|pass| DONE[Report back]
-  V -->|fail_kind=test_fail & retry=0| FP[planner-agent: Fix prompt]
-  FP --> R2[executor-agent: Run minimal patch]
-  R2 --> V2[reviewer-agent: Verify again]
+  U["User request"] --> A["Main agent<br/>ACK / orchestration"]
+  A --> P["planner-agent<br/>Plan Bundle (JSON)"]
+  P --> R["executor-agent<br/>Run (Codex)"]
+  R --> V["reviewer-agent<br/>Verify (run_commands)"]
+
+  V -->|pass| DONE["Report back"]
+  V -->|test_fail (1st)| FP["planner-agent<br/>Fix prompt"]
+  FP --> R2["executor-agent<br/>Run minimal patch"]
+  R2 --> V2["reviewer-agent<br/>Verify again"]
   V2 -->|pass| DONE
-  V2 -->|fail| HUMAN[Stop + ask human]
-  V -->|fail_kind=infra_or_auth_blocked| HUMAN
+  V2 -->|fail| HUMAN["Stop + ask human"]
+  V -->|infra/auth blocked| HUMAN
 ```
 
 ## 设计取舍
